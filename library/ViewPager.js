@@ -104,11 +104,12 @@ export default class ViewPager extends Component {
 
   render() {
     let dataSource = this.state.dataSource;
+    let list = this.props.pageDataArray;
+    if (!list) {
+      list = [];
+    }
+    this.pageCount = list.length;
     if (this.state.width && this.state.height) {
-      let list = this.props.pageDataArray;
-      if (!list) {
-        list = [];
-      }
       dataSource = dataSource.cloneWithRows(list);
       this.pageCount = list.length;
     }
