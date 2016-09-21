@@ -178,6 +178,19 @@ export default class ViewPager extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.initialPage !== this.props.initialPage) {
+      if (typeof nextProps.initialPage === 'number') {
+        if (Platform.OS === 'ios') {
+          this.scrollToPage(nextProps.initialPage, true);
+        } else {
+          //A trick to solve bugs on Android. Delay a little
+          setTimeout(this.scrollToPage.bind(this, nextProps.initialPage, true), 0);
+        }
+      }
+    };
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (!this.initialPageSettled) {
       this.initialPageSettled = true;
@@ -187,7 +200,7 @@ export default class ViewPager extends Component {
         //A trick to solve bugs on Android. Delay a little
         setTimeout(this.scrollToPage.bind(this, this.props.initialPage, true), 0);
       }
-    } else if (this.layoutChanged || prevProps.pageDataArray.length !== this.props.pageDataArray.length) {
+    } else if (this.layoutChanged) {
       this.layoutChanged = false;
       if (typeof this.currentPage === 'number') {
         if (Platform.OS === 'ios') {
